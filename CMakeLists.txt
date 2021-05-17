@@ -24,7 +24,6 @@ file(GLOB_RECURSE COMMON_SOURCE_FILES
 	${CMAKE_SOURCE_DIR}/utils/*.c
 	${CMAKE_SOURCE_DIR}/utils/*.cpp)
 
-link_directories(${CMAKE_SOURCE_DIR}/lib)
 
 # Configure assets header file
 configure_file(${CMAKE_SOURCE_DIR}/src/utils/RootDir.h.in ${CMAKE_SOURCE_DIR}/src/utils/RootDir.h)
@@ -32,27 +31,28 @@ include_directories(${CMAKE_BINARY_DIR}/)
 
 add_executable(${TARGET_NAME} ${HEADER_FILES} ${SOURCE_FILES} ${COMMON_HEADER_FILES} ${COMMON_SOURCE_FILES})
 
-# OpenGL
+# Find OpenGL installed on system.
 find_package(OpenGL REQUIRED)
 
-# GLFW
-find_package(GLFW3 REQUIRED)
-message(STATUS "Found GLFW3 in ${GLFW3_INCLUDE_DIR}")
-
+# Find Eigen installed on system.
 find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 
-# GLAD
-add_library(GLAD "thirdparty/glad.c")
+# Run cmake file in subdirectory.
+add_subdirectory(external/glfw)
+# Link a directory with generated glfw.
+target_link_directories(${TARGET_NAME} PRIVATE external/glfw/src)
+
+# Add GLAD library.
+add_library(GLAD "external/glad/src/glad.c")
 
 # Put all libraries into a variable
-set(LIBS OpenGL::GL GLAD Eigen3::Eigen)
+set(LIBS OpenGL::GL glfw GLAD Eigen3::Eigen)
 
-# Define the include DIRs
+# Define the include DIRs to search for headers.
 include_directories(
-    PUBLIC ${CMAKE_SOURCE_DIR}/
-	PUBLIC ${CMAKE_SOURCE_DIR}/include
+    PUBLIC ${CMAKE_SOURCE_DIR}/external/glfw/include
+	PUBLIC ${CMAKE_SOURCE_DIR}/external/glad/include
 )
 
-# Define the link libraries
+# Link libraries to executable target.
 target_link_libraries(${TARGET_NAME} ${LIBS})
-target_link_libraries(${TARGET_NAME} ${CMAKE_SOURCE_DIR}/lib/glfw3.dylib)
