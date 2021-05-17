@@ -1,8 +1,8 @@
 # Soft body simulation made with OpenGL and Eigen.
 
-Soft body simulation using finate element method on a tetrahedral mesh. For strain I used Neo-Hookean model. (Took the formula from https://en.wikipedia.org/wiki/Neo-Hookean_solid)
-
-Each step the system is updated using backward Euler method and rendered with OpenGL using a lil pbr shader. By default it uses linear approximation to solve equation of motion, so it's a little unstable. It is possible to use gradient descent to get more precision.
+Soft body simulation using finite element method on a tetrahedral mesh. For strain I used Neo-Hookean model. (Took the formula from https://en.wikipedia.org/wiki/Neo-Hookean_solid).
+For tetrahedral mesh generation I used https://github.com/Yixin-Hu/TetWild (Bunny meshes included in the project). After each step the tetrahedral mesh is skinned with a regular triangular mesh (also included) that gets rendered with OpenGL using a lil pbr shader.
+By default it uses linear approximation to solve equation of motion, so it's a little unstable. It is possible to use gradient descent to get more precision.
 
 ![ezgif com-video-to-gif](https://user-images.githubusercontent.com/44236259/118449727-62dd9700-b72e-11eb-96e6-411ca4f9c83a.gif)
 
